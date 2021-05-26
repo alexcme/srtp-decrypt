@@ -473,7 +473,7 @@ static int srtp_crypt (srtp_session_t *s, uint8_t *buf, size_t len)
             return EINVAL;
 
         memcpy (&extlen, buf + offset - 2, 2);
-        offset += htons (extlen); // skips RTP extension header
+        offset += htons (extlen)*4; // skips RTP extension header
     }
 
     if (len < offset)
@@ -837,6 +837,6 @@ srtcp_recv (srtp_session_t *s, uint8_t *buf, size_t *lenp)
 
     len -= 4; /* Remove SRTCP index before decryption */
     *lenp = len;
-    return srtp_crypt (s, buf, len);
+    return srtcp_crypt (s, buf, len);
 }
 
